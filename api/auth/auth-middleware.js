@@ -19,7 +19,18 @@ const checkUsernameUnique = async(req, res, next) => {
     }
 };
 
+const checkUsernameExists = async(req, res, next) => {
+    const username = req.body.username;
+    const user = await db('users').where({ username }).first();
+    if(user == null) {
+        res.status(401).json({message: 'invalid credentials'});
+    } else {
+        next();
+    }
+};
+
 module.exports = {
     checkUserValid,
-    checkUsernameUnique
+    checkUsernameUnique,
+    checkUsernameExists
 }
