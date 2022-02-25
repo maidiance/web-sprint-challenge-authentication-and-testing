@@ -13,6 +13,17 @@ beforeEach(async() => {
   await db('users').truncate();
 });
 
+describe('test User model', () => {
+  test('can find a user by id', async() => {
+    await db('users').insert({username: 'donut', password: 'abc'});
+    await db('users').insert({username: 'bacon', password: '123'});
+    await db('users').insert({username: 'coffee', password: 'test'});
+    let result = await Users.findById(2);
+    console.log(result);
+    expect(result.username).toBe('bacon');
+  });
+});
+
 describe('test auth endpoints', () => {
   describe('[POST] /api/auth/register', () => {
     test('responds with the correct status and user is added to database', async() => {
