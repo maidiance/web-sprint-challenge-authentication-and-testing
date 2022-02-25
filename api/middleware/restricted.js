@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
       the response body should include a string exactly as follows: "token invalid".
   */
   const token = req.headers.authorization;
+  console.log(token);
   if(!token) {
     res.status(401).json({message: 'token required'});
   } else {

@@ -23,6 +23,14 @@ describe('test auth endpoints', () => {
       result = await Users.findById(1);
       expect(result.username).toBe('Captain Marvel');
     });
+
+    test('responds with the correct status and message without username', async() => {
+      let result = await request(server)
+        .post('/api/auth/register')
+        .send({ password: 'foobar' });
+      expect(result.status).toBe(400);
+      expect(result.body.message).toMatch(/username and password required/i);
+    });
   });
   
   describe('[POST] /api/auth/login', () => {
@@ -32,6 +40,17 @@ describe('test auth endpoints', () => {
         .send({ username: 'Captain Marvel', password: 'foobar' });
       expect(result.status).toBe(401);
       expect(result.body.message).toMatch(/invalid credentials/i);
+    });
+
+    test('responds with correct status and message on valid credentials', async() => {
+      let result = await request(server)
+        .post('/api/auth/register')
+        .send({ username: 'Captain Marvel', password: 'foobar' });
+      result = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'Captain Marvel', password: 'foobar' });
+      expect(result.status).toBe(200);
+      expect(result.body.message).toMatch(/welcome, Captain Marvel/i);
     });
   });
 });
@@ -43,6 +62,18 @@ describe('test jokes endpoint', () => {
         .get('/api/jokes');
       expect(result.status).toBe(401);
       expect(result.body.message).toMatch(/token required/i);
+    });
+    test('requests with a valid token get a proper response', async() => {
+      let result = await request(server)
+        .post('/api/auth/register')
+        .send({ username: 'bob', password: '1234' });
+      result = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'bob', password: '1234' });
+      console.log('login', result.body);
+      result = await request(server)
+        .get('/api/jokes');
+      expect(result.status).toBe(200);
     });
   });
 });
