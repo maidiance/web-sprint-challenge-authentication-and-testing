@@ -14,19 +14,31 @@ beforeEach(async() => {
 });
 
 describe('test auth endpoints', () => {
-  test('[POST] /api/auth/register', async() => {
-    let result = await request(server)
-      .post('/api/auth/register')
-      .send({ username: 'Captain Marvel', password: 'foobar' });
-    expect(result.status).toBe(201);
-    result = await Users.findById(1);
-    expect(result.username).toBe('Captain Marvel');
+  describe('[POST] /api/auth/register', () => {
+    test('responds with the correct message and user', async() => {
+      let result = await request(server)
+        .post('/api/auth/register')
+        .send({ username: 'Captain Marvel', password: 'foobar' });
+      expect(result.status).toBe(201);
+      expect(result.body.message).toMatch(/welcome, Captain Marvel/i);
+      result = await Users.findById(1);
+      expect(result.username).toBe('Captain Marvel');
+    });
   });
+  
+  describe('[POST] /api/auth/login', () => {
+    test('responds with correct status and message on invalid credentials', async() => {
+      let result = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'Captain Marvel', password: 'foobar' });
+      expect(result.status).toBe(401);
+      expect(result.body.message).toMatch(/invalid credentials/i);
+    });
+  });
+});
 
-  test('[POST] /api/auth/login', async() => {
-    let result = await request(server)
-      .post('/api/auth/login')
-      .send({ username: 'Captain Marvel', password: 'foobar' });
-    expect(result.status).toBe(401);
+describe('test jokes endpoint', () => {
+  describe('[GET] /api/jokes', () => {
+
   });
 });
