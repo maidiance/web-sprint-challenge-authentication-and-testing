@@ -55,8 +55,16 @@ Be prepared to demonstrate your understanding of this week's concepts by answeri
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
 
-    JSON web tokens or JWT are controlled and delivered by the client, whereas sessions-based authentication are controlled and delivered by the server.
+    JSON web tokens or JWT are controlled and delivered by the client, whereas sessions-based authentication are controlled and delivered by the server. After successful authentication, a session cookie based approach would generate a sessionId, store it in a database, and send a cookie to the browser - which itself has to be included in every request to the server. Whereas in a JWT approach, the server generates a token, encrypting it before sending it to the client, where it is stored and subsequently sent with every request.
 
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+
+    A process that involves hashing and salting; even incorporating the ability to do the hashing process an exponential amount of times (2 to the power of some number) as the designer desires.
+
 3. How are unit tests different from integration and end-to-end testing?
+
+    Unit tests are for individual modules without any injection or interaction with other parts of the application. Integration testing is where we pull in modules expected to work with each other and test that they function as expected in relation to each other. Finally, end-to-end, the most expensive of tests to run, is testing the entire application from user to database, as fully as possible.
+
 4. How does _Test Driven Development_ change the way we write applications and tests?
+
+    We write tests first - setting what we expect the results and behaviors to be, then code in the functionality. That way, when we refactor, edit code, and change things in the future we can run these tests to make sure everything is still working as designed.
