@@ -19,7 +19,14 @@ describe('test User model', () => {
     await db('users').insert({username: 'bacon', password: '123'});
     await db('users').insert({username: 'coffee', password: 'test'});
     let result = await Users.findById(2);
-    console.log(result);
+    expect(result.username).toBe('bacon');
+  });
+
+  test('can find a user by username', async() => {
+    await db('users').insert({username: 'donut', password: 'abc'});
+    await db('users').insert({username: 'bacon', password: '123'});
+    await db('users').insert({username: 'coffee', password: 'test'});
+    let [result] = await Users.findBy({username: 'bacon'});
     expect(result.username).toBe('bacon');
   });
 });
