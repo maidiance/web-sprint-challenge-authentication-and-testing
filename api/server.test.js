@@ -15,12 +15,11 @@ beforeEach(async() => {
 
 describe('test auth endpoints', () => {
   describe('[POST] /api/auth/register', () => {
-    test('responds with the correct message and user', async() => {
+    test('responds with the correct status and user is added to database', async() => {
       let result = await request(server)
         .post('/api/auth/register')
         .send({ username: 'Captain Marvel', password: 'foobar' });
       expect(result.status).toBe(201);
-      expect(result.body.message).toMatch(/welcome, Captain Marvel/i);
       result = await Users.findById(1);
       expect(result.username).toBe('Captain Marvel');
     });
@@ -39,6 +38,11 @@ describe('test auth endpoints', () => {
 
 describe('test jokes endpoint', () => {
   describe('[GET] /api/jokes', () => {
-
+    test('requests without a token get a proper status and message', async() => {
+      let result = await request(server)
+        .get('/api/jokes');
+      expect(result.status).toBe(401);
+      expect(result.body.message).toMatch(/token required/i);
+    });
   });
 });
