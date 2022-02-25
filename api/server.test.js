@@ -70,9 +70,9 @@ describe('test jokes endpoint', () => {
       result = await request(server)
         .post('/api/auth/login')
         .send({ username: 'bob', password: '1234' });
-      console.log('login', result.body);
       result = await request(server)
-        .get('/api/jokes');
+        .get('/api/jokes')
+        .set('Authorization', result.body.token);
       expect(result.status).toBe(200);
     });
   });
